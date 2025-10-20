@@ -13,7 +13,10 @@ services:
       APP_DATA: /app/data
       SQLITE_PATH: /app/data/bd/bd.db
       TLS_DIR: /app/tls
+      HAP_PATH: /app/config/haproxy.cfg      # для 11_apply_haproxy_changes.py
+      HAP_CFG:  /app/config/haproxy.cfg      # для 08_deploy_haproxy_etc.sh и 12_reload_haproxy.sh
     volumes:
+      - ./payload/configs:/app/config    # работает как writable; vpnserver и скрипты пишут сюда
       - ./config:/app/config
       - ./data:/app/data
       - ./tls:/app/tls

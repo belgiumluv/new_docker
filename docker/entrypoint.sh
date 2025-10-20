@@ -12,7 +12,7 @@ set -euo pipefail
 # ---- Базовые ENV -------------------------------------------------------------
 export APP_ROOT="${APP_ROOT:-/app}"
 export APP_CFG="${APP_CFG:-$APP_ROOT/config}"          # writable
-export APP_CFG_RO="${APP_CFG_RO:-$APP_ROOT/config.ro}" # read-only seed (может отсутствовать)
+export APP_CFG_RO="${APP_CFG_RO:-$APP_ROOT/payload/configs}"  # ← seed из репо (GitHub)
 export APP_DATA="${APP_DATA:-$APP_ROOT/data}"
 export SQLITE_PATH="${SQLITE_PATH:-$APP_DATA/bd/bd.db}"
 export TLS_DIR="${TLS_DIR:-$APP_ROOT/tls}"
