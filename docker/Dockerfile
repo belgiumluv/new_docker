@@ -21,6 +21,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends certbot && rm -rf /var/lib/apt/lists/*
 
   RUN update-ca-certificates
+  
+RUN apt-get update && apt-get install -y --no-install-recommends libcap2-bin && rm -rf /var/lib/apt/lists/*
+
+# Разрешаем процессам на базе python3 слушать порты <1024
+RUN setcap 'cap_net_bind_service=+ep' /usr/bin/python3.11 || setcap 'cap_net_bind_service=+ep' /usr/bin/python3 || true
 
 # --- Пользователь без root ----------------------------------------------------
 ARG APP_UID=65532
