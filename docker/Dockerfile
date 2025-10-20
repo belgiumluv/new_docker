@@ -40,8 +40,13 @@ RUN mkdir -p /app /app/config /app/data /app/tls /app/data/run /app/data/logs
 COPY . /app
 
 # --- Исполняемые файлы --------------------------------------------------------
-RUN chmod +x /app/entrypoint.sh || true && \
-    find /app/bin -type f -exec chmod +x {} \; || true
+RUN if [ -f /app/docker/entrypoint.sh ]; then \
+      cp /app/docker/entrypoint.sh /app/entrypoint.sh; \
+    fi && \
+    chmod +x /app/entrypoint.sh 2>/dev/null || true && \
+    find /app/bin -type f -exec chmod +x {} \; || true && \
+    sed -i 's/\r$//' /app/entrypoint.sh 2>/dev/null || true
+
 
 # --- Проверка наличия бинарников ----------------------------------------------
 RUN ls -l /app/bin && \
