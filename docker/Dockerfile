@@ -42,13 +42,15 @@ WORKDIR /app
 COPY . /app
 
 # --- (опц.) Распаковка HAProxy архива ----------------------------------------
+# --- (опц.) Распаковка HAProxy архива ----------------------------------------
 RUN if [ -f /app/archives/haproxy-etc.tar.gz ]; then \
-      mkdir -p /app/config/haprory && \
+      mkdir -p /app/config/haproxy && \
       tar -xzf /app/archives/haproxy-etc.tar.gz -C /app/config/haproxy --strip-components=1 && \
       echo "[ok] extracted archives/haproxy-etc.tar.gz to /app/config/haproxy"; \
     else \
       echo "[info] no archives/haproxy-etc.tar.gz — skipping extraction"; \
     fi
+
 
 # --- Подготовка entrypoint и скриптов ----------------------------------------
 RUN if [ -f /app/docker/entrypoint.sh ]; then \
