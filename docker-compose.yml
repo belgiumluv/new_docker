@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  vpn_stack:
+    build: .
+    container_name: vpn_stack
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_ROOT: /app
+      APP_CFG: /app/config          # writable конфиги
+      APP_DATA: /app/data
+      SQLITE_PATH: /app/data/bd/bd.db
+      TLS_DIR: /app/tls
+      # HAP_EXTRA_ARGS: "-db"       # при желании
+      # RELOAD_GRACE: "5"
+    volumes:
+      - ./config:/app/config        # ВАЖНО: rw (по умолчанию), vpnserver сможет писать
+      - ./data:/app/data            # БД/логи/PID
+      - ./tls:/app/tls              # TLS (локально, если используешь)
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "bash", "-lc", "exec 3<>/dev/tcp/127.0.0.1/80; echo -e 'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3; cat <&3 >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

@@ -1,0 +1,54 @@
+# map.yml — контейнерная раскладка
+# Копирование выполняет /app/bin/copy_files.py с --root /app
+# Можно хранить "payload" (исходные файлы) где угодно, правила ниже
+# кладут результат строго под /app/*
+
+rules:
+  # --- Бинарники проекта (только внутрь /app/bin) ----------------------------
+  - from: payload/bin/*
+    to:   /app/bin/
+    owner: ""
+
+  # --- Скрипты и утилиты (если лежат вне bin в payload) ----------------------
+  - from: payload/scripts/**/* 
+    to:   /app/bin/
+    owner: ""
+
+  # --- Конфиги: haproxy, sing-box, списки доменов/серверов -------------------
+  - from: payload/config/haproxy/haproxy.cfg
+    to:   /app/config/haproxy/haproxy.cfg
+    owner: ""
+  - from: payload/config/server.json
+    to:   /app/config/server.json
+    owner: ""
+  - from: payload/config/masq_domain_list.json
+    to:   /app/config/masq_domain_list.json
+    owner: ""
+  - from: payload/config/serverlist.json
+    to:   /app/config/serverlist.json
+    owner: ""
+
+  # --- Прочие шаблоны конфигов (если есть) -----------------------------------
+  - from: payload/config/**/* 
+    to:   /app/config/
+    owner: ""
+
+  # --- TLS-шаблоны (необязательно; в K8s придут из Secret) -------------------
+  - from: payload/tls/* 
+    to:   /app/tls/
+    owner: ""
+
+  # --- Начальные данные (если нужны) -----------------------------------------
+  - from: payload/data/seed/**/* 
+    to:   /app/data/
+    owner: ""
+
+  # --- Перенос твоих Python-скриптов, если исходно не в bin ------------------
+  - from: payload/py/*.py
+    to:   /app/bin/
+    owner: ""
+
+  # --- Любые дополнительные файлы проекта ------------------------------------
+  - from: payload/extra/**/* 
+    to:   /app/
+    owner: ""
