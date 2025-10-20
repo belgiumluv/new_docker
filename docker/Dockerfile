@@ -18,7 +18,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tini \
   && rm -rf /var/lib/apt/lists/*
 
-RUN update-ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends certbot && rm -rf /var/lib/apt/lists/*
+
+  RUN update-ca-certificates
 
 # --- Пользователь без root ----------------------------------------------------
 ARG APP_UID=65532
